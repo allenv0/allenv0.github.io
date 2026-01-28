@@ -1,0 +1,586 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	html {
+		text-rendering: optimizeLegibility;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	/* Add smooth theme transitions */
+	html.dark {
+		color-scheme: dark;
+	}
+
+	/* Ensure full height coverage on mobile devices */
+	html,
+	body {
+		min-height: 100vh;
+		/* Use env() to account for mobile safe areas and browser UI */
+		min-height: -webkit-fill-available;
+	}
+
+	/* Mobile viewport safe areas to handle browser UI elements */
+	@supports (height: 100dvh) {
+		html,
+		body {
+			min-height: 100dvh;
+		}
+	}
+
+	/* Light mode - pure black text */
+	:root {
+		--text-color: #000000;
+		--link-color: #0066cc;
+	}
+
+	/* Dark mode colors */
+	.dark {
+		--text-color: #ffffff;
+		--link-color: #3b82f6;
+	}
+
+	body {
+		color: var(--text-color);
+		transition:
+			background-color 0.3s ease,
+			color 0.3s ease;
+		background-color: #faf9f5; /* Light base color to match bg-zinc-50 */
+		font-family: var(--font-ioskeley-mono), monospace;
+	}
+
+	/* Apply Ioskeley Mono font to the entire website */
+	html,
+	body {
+		font-family: var(--font-ioskeley-mono), monospace;
+	}
+
+	/* Ensure all text elements use the new font */
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p,
+	span,
+	div,
+	a,
+	button,
+	input,
+	textarea,
+	select,
+	li,
+	td,
+	th {
+		font-family: inherit;
+	}
+
+	.dark body {
+		background-color: #141413; /* Dark base color to match dark:bg-dark-base */
+	}
+
+	/* Set link colors */
+	a {
+		color: var(--link-color);
+		text-decoration: none;
+	}
+
+	/* Light mode headings - pure black */
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		color: var(--text-color);
+	}
+
+	/* Apply transitions to common elements that change with theme */
+	button,
+	a,
+	div,
+	span,
+	p,
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		transition-property: background-color, border-color, color, fill, stroke;
+		transition-duration: 0.3s;
+		transition-timing-function: ease;
+	}
+
+	/* Dark mode headings - regular text */
+	.dark h1,
+	.dark h2,
+	.dark h3,
+	.dark h4 {
+		color: var(--text-color);
+		font-weight: 600;
+	}
+
+	/* Dark mode headings for system preference */
+	@media (prefers-color-scheme: dark) {
+		h1,
+		h2,
+		h3,
+		h4 {
+			color: var(--text-color);
+			font-weight: 600;
+		}
+	}
+}
+
+@layer utilities {
+	.bg-grid {
+		background-size: 20px 20px;
+		background-image: radial-gradient(
+				circle at 10px 10px,
+				rgba(139, 92, 246, 0.05) 1px,
+				transparent 0
+			),
+			radial-gradient(
+				circle at 30px 30px,
+				rgba(6, 182, 212, 0.05) 1px,
+				transparent 0
+			);
+		background-attachment: fixed;
+		@apply dark:bg-[#141413];
+	}
+
+	.glass-panel {
+		@apply rounded-2xl border backdrop-blur-xl;
+		background-image: linear-gradient(
+			to bottom right,
+			rgba(255, 255, 255, 0.05),
+			rgba(255, 255, 255, 0.01)
+		);
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+		transition: all 0.3s ease;
+		border-color: rgba(0, 0, 0, 0.1);
+		background-color: rgba(255, 255, 255, 0.7);
+	}
+
+	.dark .glass-panel {
+		@apply border-white/10 bg-zinc-900/30;
+	}
+
+	.terminal-panel {
+		@apply rounded-lg border border-white/20 bg-black/95 backdrop-blur-md;
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+		position: relative;
+		overflow: hidden;
+	}
+
+	.light .terminal-panel {
+		@apply rounded-lg border border-blue-600/60 bg-white/95 backdrop-blur-md;
+		box-shadow:
+			0 0 20px rgba(0, 102, 204, 0.2),
+			0 8px 32px rgba(0, 0, 0, 0.1);
+	}
+
+	.terminal-cursor::after {
+		content: "";
+		@apply absolute right-2 top-1/2 h-4 w-0.5 -translate-y-1/2 bg-white/80;
+		animation: terminal-cursor 1s infinite;
+	}
+
+	.light .terminal-cursor::after {
+		@apply bg-blue-600/80;
+	}
+
+	.terminal-scan {
+		@apply absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-purple-400/40 to-transparent;
+		animation: terminal-scan 3s infinite;
+		pointer-events: none;
+		z-index: 10;
+		box-shadow: 0 0 8px rgba(138, 92, 246, 0.3);
+	}
+
+	@keyframes terminal-cursor {
+		0%,
+		50% {
+			opacity: 1;
+		}
+		51%,
+		100% {
+			opacity: 0;
+		}
+	}
+
+	@keyframes terminal-scan {
+		0% {
+			transform: translateY(0);
+			opacity: 0;
+		}
+		10% {
+			opacity: 1;
+		}
+		90% {
+			opacity: 1;
+		}
+		100% {
+			transform: translateY(400px);
+			opacity: 0;
+		}
+	}
+
+	.terminal-input {
+		@apply bg-transparent font-mono text-white placeholder-gray-500 focus:outline-none;
+		text-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+	}
+
+	.light .terminal-input {
+		@apply text-blue-600 placeholder-blue-400;
+		text-shadow: 0 0 4px rgba(0, 102, 204, 0.3);
+	}
+
+	.light .terminal-input {
+		@apply text-blue-600 placeholder-blue-400;
+		text-shadow: 0 0 4px rgba(0, 102, 204, 0.3);
+	}
+
+	.terminal-result {
+		@apply border-l-2 border-transparent font-mono text-white transition-all duration-300;
+		text-shadow: 0 0 2px rgba(255, 255, 255, 0.2);
+	}
+
+	.light .terminal-result {
+		@apply text-gray-800;
+		text-shadow: none;
+	}
+
+	.light .terminal-result {
+		@apply text-gray-800;
+		text-shadow: none;
+	}
+
+	.terminal-result:hover {
+		@apply bg-white/10;
+	}
+
+	.light .terminal-result:hover {
+		@apply bg-blue-600/10;
+	}
+
+	.terminal-result.selected {
+		@apply border-l-white/50 bg-white/20;
+		text-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
+	}
+
+	.light .terminal-result.selected {
+		@apply border-l-blue-600/50 bg-blue-600/20;
+		text-shadow: none;
+	}
+
+	.light .terminal-result.selected {
+		@apply border-l-blue-600/50 bg-blue-600/20;
+		text-shadow: none;
+	}
+
+	.terminal-prompt {
+		@apply font-mono text-white;
+		text-shadow: 0 0 3px rgba(255, 255, 255, 0.3);
+	}
+
+	.light .terminal-prompt {
+		@apply text-blue-600;
+		text-shadow: none;
+	}
+
+	.light .terminal-prompt {
+		@apply text-blue-600;
+		text-shadow: none;
+	}
+
+	.traffic-lights {
+		@apply absolute left-3 top-3 z-20 flex gap-2;
+	}
+
+	.traffic-light {
+		@apply rounded-full transition-all duration-200;
+		width: 10px;
+		height: 10px;
+	}
+
+	.traffic-light:hover {
+		transform: scale(1.1);
+	}
+
+	.traffic-light.red {
+		@apply bg-red-500;
+		box-shadow: 0 0 4px rgba(239, 68, 68, 0.6);
+	}
+
+	.traffic-light.yellow {
+		@apply bg-yellow-500;
+		box-shadow: 0 0 4px rgba(234, 179, 8, 0.6);
+	}
+
+	.traffic-light.green {
+		@apply bg-green-500;
+		box-shadow: 0 0 4px rgba(34, 197, 94, 0.6);
+	}
+
+	.traffic-light {
+		@apply rounded-full;
+		width: 10px;
+		height: 10px;
+	}
+
+	.traffic-light.red {
+		@apply bg-red-500;
+		box-shadow: 0 0 4px rgba(239, 68, 68, 0.5);
+	}
+
+	.traffic-light.yellow {
+		@apply bg-yellow-500;
+		box-shadow: 0 0 4px rgba(234, 179, 8, 0.5);
+	}
+
+	.traffic-light.green {
+		@apply bg-green-500;
+		box-shadow: 0 0 4px rgba(34, 197, 94, 0.5);
+	}
+
+	.glass-button {
+		@apply glass-panel rounded-full border px-8 py-2 text-lg font-semibold shadow-xl backdrop-blur-xl transition-all duration-200;
+		background: linear-gradient(
+			135deg,
+			rgba(255, 255, 255, 0.18) 0%,
+			rgba(255, 255, 255, 0.08) 100%
+		);
+		box-shadow:
+			0 4px 24px 0 rgba(0, 0, 0, 0.1),
+			0 1.5px 6px 0 rgba(80, 80, 255, 0.08);
+		border: 1.5px solid rgba(255, 255, 255, 0.18);
+		position: relative;
+		overflow: hidden;
+		color: var(--text-color);
+	}
+	.glass-button > * {
+		position: relative;
+		z-index: 1;
+	}
+	.glass-button::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		background: linear-gradient(
+			120deg,
+			rgba(255, 255, 255, 0.25) 0%,
+			rgba(255, 255, 255, 0.05) 100%
+		);
+		opacity: 0.7;
+		pointer-events: none;
+		z-index: -1;
+	}
+	.glass-button:hover,
+	.glass-button:focus {
+		@apply scale-105 shadow-2xl;
+		background: linear-gradient(
+			135deg,
+			rgba(255, 255, 255, 0.28) 0%,
+			rgba(255, 255, 255, 0.12) 100%
+		);
+	}
+	.glass-button:active {
+		@apply scale-95;
+	}
+
+	.glass-button-sm {
+		@apply rounded-full border px-2 py-0.5 text-xs font-semibold shadow backdrop-blur-xl transition-all duration-200;
+		background: linear-gradient(
+			135deg,
+			rgba(255, 255, 255, 0.18) 0%,
+			rgba(255, 255, 255, 0.08) 100%
+		);
+		box-shadow:
+			0 2px 8px 0 rgba(0, 0, 0, 0.08),
+			0 1px 3px 0 rgba(80, 80, 255, 0.05);
+		border: 1px solid rgba(255, 255, 255, 0.15);
+		position: relative;
+		overflow: hidden;
+		color: var(--text-color);
+	}
+	.glass-button-sm::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		background: linear-gradient(
+			120deg,
+			rgba(255, 255, 255, 0.18) 0%,
+			rgba(255, 255, 255, 0.03) 100%
+		);
+		opacity: 0.6;
+		pointer-events: none;
+	}
+	.glass-button-sm:hover,
+	.glass-button-sm:focus {
+		@apply scale-105 shadow-md;
+		background: linear-gradient(
+			135deg,
+			rgba(255, 255, 255, 0.24) 0%,
+			rgba(255, 255, 255, 0.1) 100%
+		);
+	}
+	.glass-button-sm:active {
+		@apply scale-95;
+	}
+
+	@keyframes float {
+		0% {
+			transform: translateY(0px);
+		}
+		50% {
+			transform: translateY(-8px);
+		}
+		100% {
+			transform: translateY(0px);
+		}
+	}
+
+	.animate-float {
+		animation: float 4s ease-in-out infinite;
+	}
+
+	@keyframes fade-in {
+		0% {
+			opacity: 0;
+			transform: translateY(10px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.animate-fade-in {
+		animation: fade-in 0.5s ease-out forwards;
+	}
+
+	@keyframes slide-up {
+		0% {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.animate-slide-up {
+		animation: slide-up 0.6s ease-out forwards;
+	}
+
+	/* DVD shelf utilities */
+	.writing-mode-vertical {
+		writing-mode: vertical-rl;
+		text-orientation: mixed;
+	}
+
+	.preserve-3d {
+		transform-style: preserve-3d;
+	}
+
+	/* 3D transform utilities for DVD pull-out effect */
+	.dvd-cover-resting {
+		transform: translateZ(0px) rotateY(0deg);
+	}
+
+	.dvd-cover-hover-mobile {
+		transform: translateZ(30px) rotateY(-15deg);
+	}
+
+	.dvd-cover-hover-tablet {
+		transform: translateZ(45px) rotateY(-15deg);
+	}
+
+	.dvd-cover-hover-desktop {
+		transform: translateZ(60px) rotateY(-15deg);
+	}
+
+	/* Respect reduced motion preference */
+	@media (prefers-reduced-motion: reduce) {
+		.preserve-3d,
+		.writing-mode-vertical,
+		.dvd-cover-resting,
+		.dvd-cover-hover-mobile,
+		.dvd-cover-hover-tablet,
+		.dvd-cover-hover-desktop {
+			transform: none !important;
+		}
+	}
+
+	/* DVD spine stable positioning - override global transitions */
+	.dvd-spine-stable {
+		transition-property: border-color, background-color !important;
+		transition-duration: 200ms !important;
+		transition-timing-function: ease !important;
+		transform: none !important;
+	}
+
+	/* Completely static elements - override ALL transitions */
+	.dvd-row-static {
+		transition: none !important;
+		transform: none !important;
+		animation: none !important;
+		will-change: auto !important;
+	}
+
+	/* Ensure the element itself has no transitions */
+	.dvd-row-static {
+		transition-property: none !important;
+	}
+
+	.dvd-row-static,
+	.dvd-row-static *,
+	.dvd-row-static::before,
+	.dvd-row-static::after {
+		transition: none !important;
+		transform: none !important;
+		animation: none !important;
+		will-change: auto !important;
+		backface-visibility: visible !important;
+		perspective: none !important;
+	}
+
+	/* Hide scrollbar for clean UI */
+	.scrollbar-hide {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
+	.scrollbar-hide::-webkit-scrollbar {
+		display: none;
+	}
+}
+
+.prose a.gradient-link {
+	@apply font-semibold text-blue-600;
+}
+
+.dark .prose a.gradient-link {
+	@apply font-semibold;
+	color: var(--link-color);
+}
+
+/* Mark element styling */
+mark {
+	background-color: #fef08a; /* yellow-200 */
+	color: #000000;
+	padding: 0.125rem 0.25rem;
+	border-radius: 0.25rem;
+}
+
+.dark mark {
+	background-color: #ca8a04; /* yellow-600 */
+	color: #ffffff;
+}

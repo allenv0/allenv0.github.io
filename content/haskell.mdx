@@ -1,0 +1,117 @@
+---
+title: Haskell Is Not Startup-Friendly
+date: 2018-12-30 14:00:00 -07:00
+summary: Move too slow
+cover: /images/blog/haskell.webp
+coverAlt: A metallic rainbow artwork on a black background.
+---
+
+(2018)
+
+![OpenAI logo](/images/blog/haskell.webp)
+
+
+Functional programming, especially Haskell, has completely reshaped how I think about software development. I’ve worked with a bunch of object-oriented languages, but Haskell just clicks differently. It’s designed with efficiency in mind, letting you write expressive code without constantly worrying about errors popping up at runtime. Unlike a lot of other languages, it doesn’t demand endless error-checking and defensive coding, so I can focus more on making my code do what I intend.
+
+In 2017, I had the chance to lead a Haskell team at Condé Nast International(北京、上海), where we worked on backend projects for brands like Vogue, GQ, and a secret WIRED AI project. For "open-minded?" developers familiar with languages like Java, Python, or C++, getting productive in Haskell takes a little time—usually around two or three months with coaching and self-study. By the six-month mark, though, most dev feel quite confident with Haskell’s ecosystem and can dive into nearly any task. It’s true that Haskell’s abstractions can feel unusual at first, but once you get the hang of it, it drastically reduces the mental juggling you’d typically need in other languages.
+
+One of Haskell’s strengths is how it lightens the cognitive load. In languages like C++ or Java, you’re constantly managing stuff like memory, object lifetimes, and performance hacks, all of which can slow down development and introduce tricky bugs. Haskell takes most of that off your plate. Its strong static typing and way of making side effects explicit eliminate whole classes of errors at compile time, so there’s a lot less worrying about weird bugs slipping through.
+
+
+**The Challenges of Using Haskell in Startups**
+
+It does come with some challenges — especially if you’re in a fast-moving startup.
+
+1. The Haskell ecosystem lacks the kind of mature, ready-to-go libraries and frameworks you find in languages like Python or JavaScript. This often means building more things from scratch, which can slow things down if you’re on a tight deadline.
+Technical Hurdles
+
+2. Compilation Speed: Haskell’s compiler can be very slow, which can feel like a drag when you’re iterating frequently.
+
+3. Error Reporting: The compiler stops at the first error, so you might end up chasing issues one at a time instead of getting a full view of what needs fixing.
+
+4. Tooling: Compared to languages like Python, Haskell’s tooling is limited. IDE support, debugging, and refactoring tools are still developing, so working in Haskell can feel like more of a manual process.
+
+**Ecosystem Limitations**
+
+The library ecosystem can also be a drawback, especially if you’re working on enterprise-grade projects. Many libraries are either incomplete or unmaintained, which can be a risk if you’re relying on them for core functionality. As a team lead, I saw firsthand how these gaps could slow down development when you’re always troubleshooting or looking for alternatives.
+
+Despite these challenges, I’m still a big believer in what Haskell brings to the table. Even if it’s not the go-to language for startups, Haskell’s ideas—like lazy evaluation, monads, and algebraic data types—have shaped the design of other languages and frameworks. Working with Haskell has made me a better developer and changed the way I think about coding, period.
+
+While it might never be the popular choice, its impact is lasting and has inspired a wave of functional programming that’s woven into modern software development.
+
+---
+
+### Note
+
+Haskell’s lazy evaluation and higher-order functions also make it easy to combine small functions to tackle complex problems without a ton of boilerplate code. Here are a few examples to show how this works:
+
+**Example 1: Filtering List Elements**
+
+```haskell
+data Person = Person { name :: String, age :: Int }
+
+people = [ Person "Alice" 25, Person "Bob" 32, Person "Charlie" 19 ]
+
+namesOver21 :: [Person] -> [String]
+namesOver21 = map name . filter ((>21) . age)
+
+main = print $ "Names over 21: " ++ show (namesOver21 people)
+```
+
+This code defines a `Person` data type, filters the list to include only those over 21, and maps their names into a new list. It showcases how Haskell’s higher-order functions allow for complex operations to be expressed in a concise and declarative manner.
+
+**Example 2: Leveraging Lazy Evaluation**
+
+```haskell
+-- Infinite sequence of natural numbers
+naturals :: [Integer]
+naturals = iterate (+1) 0
+
+-- Take elements from the infinite sequence until a number greater than 10 is found
+takeWhileLessThan10 :: [Integer] -> [Integer]
+takeWhileLessThan10 = takeWhile (<= 10)
+
+main = print $ takeWhileLessThan10 naturals
+```
+
+Haskell’s lazy evaluation allows the program to generate and process an infinite sequence, halting when a condition is met. This approach avoids unnecessary computation and exemplifies how Haskell can efficiently manage potentially vast data sets.
+
+**Example 3: Using Higher-Order Functions**
+
+```haskell
+-- Define a list of numbers
+numbers = [1..10]
+
+-- Use map to double each number in the list
+doubleNumbers :: [Integer] -> [Integer]
+doubleNumbers = map (*2)
+
+-- Use filter to keep only even numbers
+evenNumbers :: [Integer] -> [Integer]
+evenNumbers = filter even
+
+main = do
+    let doubled = doubleNumbers numbers
+    let evens = evenNumbers doubled
+    print $ "Doubled and filtered numbers: " ++ show evens
+```
+
+This example illustrates how Haskell’s `map` and `filter` functions can be combined to transform and filter data declaratively, without the need for complex control structures.
+
+**Example 4: Harnessing Algebraic Data Types**
+
+
+```haskell
+data Tree a = Leaf a | Node (Tree a) (Tree a) deriving Show
+
+-- Function to count the number of nodes in a tree
+countNodes :: Tree a -> Int
+countNodes (Leaf _) = 1
+countNodes (Node left right) = 1 + countNodes(left) + countNodes(right)
+
+main = do
+    let tree = Node (Leaf "hello") (Node (Leaf "world") (Leaf "!"))
+    print $ "Number of nodes: " ++ show (countNodes tree)
+```
+
+Here, algebraic data types are used to define a binary tree, and pattern matching provides a concise and readable way to traverse and process the structure.

@@ -36,3 +36,23 @@ export const createMockSocialLink = (overrides = {}) => ({
   label: 'Test',
   ...overrides,
 });
+
+// Test helpers for common patterns
+export const flushPromises = () =>
+  new Promise((resolve) => setTimeout(resolve, 0));
+
+export const mockMatchMedia = (matches: boolean = false) => {
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: jest.fn().mockImplementation((query) => ({
+      matches,
+      media: query,
+      onchange: null,
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    })),
+  });
+};

@@ -19,7 +19,7 @@ const HeroSection = ({ macPosition, showOrbit, onOrbitingImageClick, onMacClick 
         <Orb className="-top-62 left-62 bg-purple-400/30 dark:bg-purple-600/30" />
       </OrbContainer>
 
-      <div className={`relative flex justify-center ${macPosition === "center" ? "mb-4 mt-[20vh]" : "mb-4"}`}>
+      <div className={`relative flex justify-center ${macPosition === "center" ? "mb-4" : "mb-4"}`}>
         {/* Orbiting images - hidden on mobile (sm:), visible on desktop */}
         <div className="hidden sm:block">
           <OrbitingImages isVisible={showOrbit} onImageClick={onOrbitingImageClick} />

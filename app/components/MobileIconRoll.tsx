@@ -139,13 +139,27 @@ export function MobileIconRoll() {
 						paddingRight: "1.5rem",
 					}}
 				>
-					{orbitingImages.map(({ image, alt }) => (
-						<IconItem
-							key={alt}
-							image={image}
-							alt={alt}
-						/>
-					))}
+					{(() => {
+						// Define the desired order
+						const desiredOrder = ["Air8", "AL", "TT", "LAM", "GitHub", "Ale Dev"];
+
+						// Create a map for quick lookup
+						const imageMap = new Map(
+							orbitingImages.map(item => [item.alt, item])
+						);
+
+						// Return items in the desired order, filtering out Lemotsh and Movies
+						return desiredOrder
+							.filter(alt => imageMap.has(alt))
+							.map(alt => imageMap.get(alt)!)
+							.map(({ image, alt }) => (
+								<IconItem
+									key={alt}
+									image={image}
+									alt={alt}
+								/>
+							));
+					})()}
 				</div>
 
 				{/* Scroll progress indicator */}

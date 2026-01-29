@@ -106,7 +106,7 @@ export default function RootLayout({
 						<Navbar />
 						<main
 							id="main"
-							className="mx-auto mt-16 max-w-[90%] grow lg:mt-0 lg:max-w-[60%]"
+							className="mx-auto flex max-w-[90%] grow flex-col items-center justify-center lg:mt-0 lg:max-w-[60%]"
 						>
 							{children}
 						</main>

@@ -19,9 +19,6 @@ const HeroSection = ({ macPosition, showOrbit, onOrbitingImageClick, onMacClick 
         <Orb className="-top-62 left-62 bg-purple-400/30 dark:bg-purple-600/30" />
       </OrbContainer>
 
-      {/* Mobile icon roll - only visible on mobile */}
-      <MobileIconRoll onImageClick={onOrbitingImageClick} />
-
       <div className={`relative flex justify-center ${macPosition === "center" ? "mb-4 mt-[20vh]" : "mb-4"}`}>
         {/* Orbiting images - hidden on mobile (sm:), visible on desktop */}
         <div className="hidden sm:block">
@@ -41,6 +38,9 @@ const HeroSection = ({ macPosition, showOrbit, onOrbitingImageClick, onMacClick 
           />
         </div>
       </div>
+
+      {/* Mobile icon roll - only visible on mobile, at bottom, no click handlers */}
+      <MobileIconRoll />
 
       {macPosition === "top" && (
         <div className="mx-auto max-w-[400px] space-y-2 text-center text-lg md:text-xl lg:text-xl"></div>

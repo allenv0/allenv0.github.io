@@ -4,11 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { orbitingImages } from "@/config";
 
-interface MobileIconRollProps {
-	onImageClick?: (imageAlt: string) => void;
-}
-
-export function MobileIconRoll({ onImageClick }: MobileIconRollProps) {
+export function MobileIconRoll() {
 	const [canScrollLeft, setCanScrollLeft] = useState(false);
 	const [canScrollRight, setCanScrollRight] = useState(false);
 	const [scrollProgress, setScrollProgress] = useState(0);
@@ -76,7 +72,7 @@ export function MobileIconRoll({ onImageClick }: MobileIconRollProps) {
 				className="relative overflow-hidden rounded-2xl"
 				style={{
 					minHeight: "6rem",
-					marginBottom: "1rem",
+					marginTop: "1rem",
 				}}
 			>
 				{/* Gradient background */}
@@ -128,7 +124,7 @@ export function MobileIconRoll({ onImageClick }: MobileIconRollProps) {
 					</button>
 				)}
 
-				{/* Icons row with scroll */}
+				{/* Icons row with scroll - visual only, no click handlers */}
 				<div
 					ref={scrollContainerRef}
 					className="scrollbar-hide relative flex items-center gap-4 overflow-x-auto overflow-y-hidden"
@@ -148,7 +144,6 @@ export function MobileIconRoll({ onImageClick }: MobileIconRollProps) {
 							key={alt}
 							image={image}
 							alt={alt}
-							onClick={() => onImageClick?.(alt)}
 						/>
 					))}
 				</div>
@@ -168,12 +163,9 @@ export function MobileIconRoll({ onImageClick }: MobileIconRollProps) {
 interface IconItemProps {
 	image: string;
 	alt: string;
-	onClick: () => void;
 }
 
-function IconItem({ image, alt, onClick }: IconItemProps) {
-	const [isPressed, setIsPressed] = useState(false);
-
+function IconItem({ image, alt }: IconItemProps) {
 	return (
 		<div
 			style={{
@@ -193,7 +185,8 @@ function IconItem({ image, alt, onClick }: IconItemProps) {
 					position: "relative",
 				}}
 			>
-				<button
+				{/* Visual-only container, no button or click handlers */}
+				<div
 					style={{
 						position: "absolute",
 						inset: 0,
@@ -204,22 +197,10 @@ function IconItem({ image, alt, onClick }: IconItemProps) {
 						borderRadius: "0.75rem",
 						borderWidth: "2px",
 						borderStyle: "solid",
-						borderColor: isPressed
-							? "rgb(139 92 246)"
-							: "rgb(212 212 212 / 0.5)",
-						backgroundColor: isPressed
-							? "rgb(39 39 42 / 0.7)"
-							: "rgb(39 39 42 / 0.5)",
-						transition: "background-color 0.15s ease, border-color 0.15s ease",
-						cursor: "pointer",
+						borderColor: "rgb(212 212 212 / 0.5)",
+						backgroundColor: "rgb(39 39 42 / 0.5)",
+						cursor: "default",
 					}}
-					onMouseDown={() => setIsPressed(true)}
-					onMouseUp={() => setIsPressed(false)}
-					onMouseLeave={() => setIsPressed(false)}
-					onTouchStart={() => setIsPressed(true)}
-					onTouchEnd={() => setIsPressed(false)}
-					onClick={onClick}
-					aria-label={alt}
 				>
 					<Image
 						src={image}
@@ -234,7 +215,7 @@ function IconItem({ image, alt, onClick }: IconItemProps) {
 						sizes="48px"
 						priority
 					/>
-				</button>
+				</div>
 			</div>
 		</div>
 	);

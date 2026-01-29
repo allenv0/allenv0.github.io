@@ -39,8 +39,8 @@ const HeroSection = ({ macPosition, showOrbit, onOrbitingImageClick, onMacClick 
         </div>
       </div>
 
-      {/* Mobile icon roll - only visible on mobile, at bottom, no click handlers */}
-      <MobileIconRoll />
+      {/* Mobile icon roll - only visible on mobile, at bottom, with click handlers */}
+      <MobileIconRoll onImageClick={onOrbitingImageClick} />
 
       {macPosition === "top" && (
         <div className="mx-auto max-w-[400px] space-y-2 text-center text-lg md:text-xl lg:text-xl"></div>

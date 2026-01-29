@@ -4,7 +4,11 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { orbitingImages } from "@/config";
 
-export function MobileIconRoll() {
+interface MobileIconRollProps {
+	onImageClick?: (imageAlt: string) => void;
+}
+
+export function MobileIconRoll({ onImageClick }: MobileIconRollProps) {
 	const [canScrollLeft, setCanScrollLeft] = useState(false);
 	const [canScrollRight, setCanScrollRight] = useState(false);
 	const [scrollProgress, setScrollProgress] = useState(0);
@@ -157,6 +161,7 @@ export function MobileIconRoll() {
 									key={alt}
 									image={image}
 									alt={alt}
+									onClick={() => onImageClick?.(alt)}
 								/>
 							));
 					})()}
@@ -177,9 +182,10 @@ export function MobileIconRoll() {
 interface IconItemProps {
 	image: string;
 	alt: string;
+	onClick: () => void;
 }
 
-function IconItem({ image, alt }: IconItemProps) {
+function IconItem({ image, alt, onClick }: IconItemProps) {
 	return (
 		<div
 			style={{
@@ -199,8 +205,8 @@ function IconItem({ image, alt }: IconItemProps) {
 					position: "relative",
 				}}
 			>
-				{/* Visual-only container, no button or click handlers */}
-				<div
+				<button
+					onClick={onClick}
 					style={{
 						position: "absolute",
 						inset: 0,
@@ -213,8 +219,18 @@ function IconItem({ image, alt }: IconItemProps) {
 						borderStyle: "solid",
 						borderColor: "rgb(212 212 212 / 0.5)",
 						backgroundColor: "rgb(39 39 42 / 0.5)",
-						cursor: "default",
+						cursor: "pointer",
+						transition: "background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease",
 					}}
+					onMouseEnter={(e) => {
+						e.currentTarget.style.backgroundColor = "rgb(39 39 42 / 0.7)";
+						e.currentTarget.style.borderColor = "rgb(129 140 248 / 0.8)";
+					}}
+					onMouseLeave={(e) => {
+						e.currentTarget.style.backgroundColor = "rgb(39 39 42 / 0.5)";
+						e.currentTarget.style.borderColor = "rgb(212 212 212 / 0.5)";
+					}}
+					aria-label={alt}
 				>
 					<Image
 						src={image}
@@ -229,7 +245,7 @@ function IconItem({ image, alt }: IconItemProps) {
 						sizes="48px"
 						priority
 					/>
-				</div>
+				</button>
 			</div>
 		</div>
 	);

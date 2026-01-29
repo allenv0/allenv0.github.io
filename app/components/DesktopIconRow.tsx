@@ -45,7 +45,7 @@ export function DesktopIconRow({ onImageClick }: DesktopIconRowProps) {
 			<div
 				className="relative overflow-hidden rounded-3xl"
 				style={{
-					minHeight: "8rem",
+					minHeight: "5.6rem",
 					marginTop: "2rem",
 					marginBottom: "1rem",
 				}}
@@ -58,11 +58,11 @@ export function DesktopIconRow({ onImageClick }: DesktopIconRowProps) {
 					ref={scrollContainerRef}
 					className="scrollbar-hide relative flex items-center gap-6 overflow-x-auto overflow-y-hidden"
 					style={{
-						height: "8rem",
-						minHeight: "8rem",
-						maxHeight: "8rem",
-						paddingTop: "1.5rem",
-						paddingBottom: "1.5rem",
+						height: "5.6rem",
+						minHeight: "5.6rem",
+						maxHeight: "5.6rem",
+						paddingTop: "1rem",
+						paddingBottom: "1rem",
 						paddingLeft: "2rem",
 						paddingRight: "2rem",
 					}}

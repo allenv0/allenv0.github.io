@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import { orbitingImages } from "@/config";
 
@@ -11,36 +11,8 @@ interface DesktopIconRowProps {
 export function DesktopIconRow({ onImageClick }: DesktopIconRowProps) {
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-	// Auto-scroll animation
-	useEffect(() => {
-		const container = scrollContainerRef.current;
-		if (!container) return;
-
-		let scrollAmount = 0;
-		const scrollSpeed = 0.5; // pixels per frame
-		let animationId: number;
-
-		const animate = () => {
-			scrollAmount += scrollSpeed;
-			container.scrollLeft = scrollAmount;
-
-			// Reset when we reach the end
-			if (scrollAmount >= container.scrollWidth - container.clientWidth) {
-				scrollAmount = 0;
-			}
-
-			animationId = requestAnimationFrame(animate);
-		};
-
-		animationId = requestAnimationFrame(animate);
-
-		return () => {
-			cancelAnimationFrame(animationId);
-		};
-	}, []);
-
 	return (
-		<div className="relative w-full max-w-2xl px-4 hidden md:block">
+		<div className="relative w-full max-w-3xl px-4 hidden md:block">
 			{/* Icon row container */}
 			<div
 				className="relative overflow-hidden rounded-3xl"

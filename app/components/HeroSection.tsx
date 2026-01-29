@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { OrbContainer, Orb } from "@/components/Orb";
-import OrbitingImages from "./OrbitingImages";
+import { DesktopIconRow } from "./DesktopIconRow";
 import { MobileIconRoll } from "./MobileIconRoll";
 import { siteConfig } from "@/config";
 
@@ -20,11 +20,6 @@ const HeroSection = ({ macPosition, showOrbit, onOrbitingImageClick, onMacClick 
       </OrbContainer>
 
       <div className={`relative flex justify-center ${macPosition === "center" ? "mb-4" : "mb-4"}`}>
-        {/* Orbiting images - hidden on mobile (sm:), visible on desktop */}
-        <div className="hidden sm:block">
-          <OrbitingImages isVisible={showOrbit} onImageClick={onOrbitingImageClick} />
-        </div>
-
         {/* Central mac image */}
         <div className="relative z-10">
           <Image
@@ -38,6 +33,9 @@ const HeroSection = ({ macPosition, showOrbit, onOrbitingImageClick, onMacClick 
           />
         </div>
       </div>
+
+      {/* Desktop icon row - visible on desktop/tablet */}
+      <DesktopIconRow onImageClick={onOrbitingImageClick} />
 
       {/* Mobile icon roll - only visible on mobile, at bottom, with click handlers */}
       <MobileIconRoll onImageClick={onOrbitingImageClick} />

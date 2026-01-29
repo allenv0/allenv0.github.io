@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { OrbContainer, Orb } from "@/components/Orb";
 import OrbitingImages from "./OrbitingImages";
+import { MobileIconRoll } from "./MobileIconRoll";
 import { siteConfig } from "@/config";
 
 interface HeroSectionProps {
@@ -18,9 +19,14 @@ const HeroSection = ({ macPosition, showOrbit, onOrbitingImageClick, onMacClick 
         <Orb className="-top-62 left-62 bg-purple-400/30 dark:bg-purple-600/30" />
       </OrbContainer>
 
+      {/* Mobile icon roll - only visible on mobile */}
+      <MobileIconRoll onImageClick={onOrbitingImageClick} />
+
       <div className={`relative flex justify-center ${macPosition === "center" ? "mb-4 mt-[20vh]" : "mb-4"}`}>
-        {/* Orbiting images */}
-        <OrbitingImages isVisible={showOrbit} onImageClick={onOrbitingImageClick} />
+        {/* Orbiting images - hidden on mobile (sm:), visible on desktop */}
+        <div className="hidden sm:block">
+          <OrbitingImages isVisible={showOrbit} onImageClick={onOrbitingImageClick} />
+        </div>
 
         {/* Central mac image */}
         <div className="relative z-10">

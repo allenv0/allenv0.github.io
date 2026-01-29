@@ -40,7 +40,7 @@ export function DesktopIconRow({ onImageClick }: DesktopIconRowProps) {
 	}, []);
 
 	return (
-		<div className="relative w-full max-w-4xl px-4 hidden md:block">
+		<div className="relative w-full max-w-2xl px-4 hidden md:block">
 			{/* Icon row container */}
 			<div
 				className="relative overflow-hidden rounded-3xl"

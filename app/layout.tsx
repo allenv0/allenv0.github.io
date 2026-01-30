@@ -93,8 +93,7 @@ export default function RootLayout({
 			className={`${IoskeleyMono.variable} scroll-smooth [scrollbar-gutter:stable]`}
 			style={{ fontFamily: "var(--font-ioskeley-mono), monospace" }}
 		>
-			<body className="flex min-h-screen max-w-full flex-col items-center gap-8 bg-zinc-50 px-4 pb-8 dark:bg-dark-base lg:mx-auto lg:flex lg:flex-row lg:py-20">
-				<div className="bg-grid fixed left-0 top-0 -z-50 size-full h-screen w-screen [mask-image:radial-gradient(ellipse_at_top_left,black,transparent_50%)]" />
+			<body className="flex min-h-screen max-w-full flex-col items-center gap-8 px-4 pb-8 lg:mx-auto lg:flex lg:flex-row lg:py-20 dark:bg-dark-base">
 
 				<ThemeProvider
 					attribute="class"

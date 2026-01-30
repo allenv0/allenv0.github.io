@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { orbitingImages } from "@/config";
 
 interface DesktopIconRowProps {
@@ -10,6 +11,15 @@ interface DesktopIconRowProps {
 
 export function DesktopIconRow({ onImageClick }: DesktopIconRowProps) {
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
+	const router = useRouter();
+
+	const handleIconClick = (alt: string) => {
+		if (alt === "Movies") {
+			router.push("/movies");
+		} else {
+			onImageClick?.(alt);
+		}
+	};
 
 	return (
 		<div className="relative w-full max-w-3xl px-4 hidden md:block">
@@ -41,14 +51,14 @@ export function DesktopIconRow({ onImageClick }: DesktopIconRowProps) {
 				>
 					{(() => {
 						// Define the desired order
-						const desiredOrder = ["Air8", "AL", "TT", "LAM", "GitHub", "Ale Dev"];
+						const desiredOrder = ["Air8", "AL", "TT", "LAM", "GitHub", "Ale Dev", "Movies"];
 
 						// Create a map for quick lookup
 						const imageMap = new Map(
 							orbitingImages.map(item => [item.alt, item])
 						);
 
-						// Return items in the desired order, filtering out Lemotsh and Movies
+						// Return items in the desired order
 						return desiredOrder
 							.filter(alt => imageMap.has(alt))
 							.map(alt => imageMap.get(alt)!)
@@ -57,7 +67,7 @@ export function DesktopIconRow({ onImageClick }: DesktopIconRowProps) {
 									key={alt}
 									image={image}
 									alt={alt}
-									onClick={() => onImageClick?.(alt)}
+									onClick={() => handleIconClick(alt)}
 								/>
 							));
 					})()}

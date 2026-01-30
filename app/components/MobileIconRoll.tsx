@@ -155,7 +155,7 @@ export function MobileIconRoll({ onImageClick }: MobileIconRollProps) {
 				>
 					{(() => {
 						// Define the desired order
-						const desiredOrder = ["Air8", "AL", "TT", "LAM", "GitHub", "Ale Dev", "Movies"];
+						const desiredOrder = ["TT", "Air8", "LAM", "Movies", "AL", "GitHub", "Ale Dev"];
 
 						// Create a map for quick lookup
 						const imageMap = new Map(

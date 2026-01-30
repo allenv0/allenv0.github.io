@@ -78,7 +78,7 @@ export const orbitingImages = [
 	},
 	{
 		angle: 135,
-		image: "/images/projects/Mail.webp",
+		image: "/images/projects/craft.png",
 		alt: "LAM",
 		speedMultiplier: 1.0,
 		orbitRadiusMultiplier: 1.0,
@@ -100,7 +100,7 @@ export const orbitingImages = [
 	},
 	{
 		angle: 225,
-		image: "/images/projects/twitter.webp",
+		image: "/images/projects/twitter.png",
 		alt: "Ale Dev",
 		speedMultiplier: 1.0,
 		orbitRadiusMultiplier: 1.0,

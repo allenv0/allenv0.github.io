@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { orbitingImages } from "@/config";
@@ -12,6 +12,7 @@ interface DesktopIconRowProps {
 export function DesktopIconRow({ onImageClick }: DesktopIconRowProps) {
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 	const router = useRouter();
+	const [scrollProgress, setScrollProgress] = useState(0);
 
 	const handleIconClick = (alt: string) => {
 		if (alt === "Movies") {
@@ -20,6 +21,32 @@ export function DesktopIconRow({ onImageClick }: DesktopIconRowProps) {
 			onImageClick?.(alt);
 		}
 	};
+
+	// Track scroll progress
+	useEffect(() => {
+		const container = scrollContainerRef.current;
+		if (!container) return;
+
+		const handleScroll = () => {
+			const progress =
+				container.scrollLeft /
+				(container.scrollWidth - container.clientWidth || 1);
+			setScrollProgress(progress);
+		};
+
+		container.addEventListener("scroll", handleScroll);
+
+		// Initial check
+		handleScroll();
+
+		// Recheck on window resize
+		window.addEventListener("resize", handleScroll);
+
+		return () => {
+			container.removeEventListener("scroll", handleScroll);
+			window.removeEventListener("resize", handleScroll);
+		};
+	}, []);
 
 	return (
 		<div className="relative w-full max-w-3xl px-4 hidden md:block">
@@ -74,8 +101,11 @@ export function DesktopIconRow({ onImageClick }: DesktopIconRowProps) {
 				</div>
 
 				{/* Scroll progress indicator */}
-				<div className="absolute bottom-0 left-0 right-0 h-1.5 bg-violet-200/40 dark:bg-violet-800/30">
-					<div className="h-full w-full bg-gradient-to-r from-violet-500 to-indigo-500 animate-pulse dark:from-violet-400 dark:to-indigo-400" />
+				<div className="absolute bottom-0 left-0 right-0 h-1 bg-violet-200/30 dark:bg-violet-800/20">
+					<div
+						className="h-full bg-gradient-to-r from-violet-500 to-indigo-500 transition-all duration-300 dark:from-violet-400 dark:to-indigo-400"
+						style={{ width: `${scrollProgress * 100}%` }}
+					/>
 				</div>
 			</div>
 		</div>
@@ -101,33 +131,26 @@ function DesktopIconItem({ image, alt, onClick }: DesktopIconItemProps) {
 			}}
 		>
 			<div
+				className="overflow-hidden rounded-2xl border-2 border-zinc-300/50 bg-transparent transition-all duration-300 hover:border-violet-400/80 hover:bg-zinc-800/70 hover:scale-110 hover:shadow-xl hover:shadow-violet-500/20 dark:border-zinc-600/50 dark:hover:border-violet-400/60"
 				style={{
 					width: "5rem",
 					height: "5rem",
-					overflow: "hidden",
 					position: "relative",
 				}}
 			>
+				<Image
+					src={image}
+					alt={alt}
+					fill
+					className="object-cover transition-transform duration-300 hover:scale-110"
+					sizes="80px"
+					priority
+				/>
 				<button
 					onClick={onClick}
-					className="group relative flex h-full w-full items-center justify-center overflow-hidden rounded-2xl border-2 border-zinc-300/50 bg-transparent transition-all duration-300 hover:border-violet-400/80 hover:bg-zinc-800/70 hover:scale-110 hover:shadow-xl hover:shadow-violet-500/20 dark:border-zinc-600/50 dark:hover:border-violet-400/60"
+					className="absolute inset-0 z-10"
 					aria-label={alt}
-				>
-					<Image
-						src={image}
-						alt={alt}
-						width={64}
-						height={64}
-						className="transition-transform duration-300 group-hover:scale-110"
-						style={{
-							objectFit: "cover",
-						}}
-						sizes="64px"
-						priority
-					/>
-					{/* Hover glow effect */}
-					<div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-tr from-violet-500/0 via-violet-500/0 to-violet-500/0 opacity-0 transition-opacity duration-300 group-hover:from-violet-500/10 group-hover:via-violet-500/5 group-hover:to-violet-500/0 group-hover:opacity-100" />
-				</button>
+				/>
 			</div>
 		</div>
 	);

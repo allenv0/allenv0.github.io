@@ -208,54 +208,34 @@ function IconItem({ image, alt, onClick }: IconItemProps) {
 			}}
 		>
 			<div
+				className="overflow-hidden rounded-xl border-2 border-zinc-300/50 bg-transparent transition-all duration-150 hover:border-violet-400/80 hover:bg-zinc-800/70 dark:border-zinc-600/50 dark:hover:border-violet-400/60"
 				style={{
 					width: "3.5rem",
 					height: "3.5rem",
-					overflow: "hidden",
 					position: "relative",
 				}}
 			>
+				<Image
+					src={image}
+					alt={alt}
+					fill
+					className="object-cover"
+					sizes="56px"
+					priority
+				/>
 				<button
 					onClick={onClick}
-					style={{
-						position: "absolute",
-						inset: 0,
-						display: "flex",
-						alignItems: "center",
-						justifyContent: "center",
-						overflow: "hidden",
-						borderRadius: "0.75rem",
-						borderWidth: "2px",
-						borderStyle: "solid",
-						borderColor: "rgb(212 212 212 / 0.5)",
-						backgroundColor: "transparent",
-						cursor: "pointer",
-						transition: "background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease",
-					}}
 					onMouseEnter={(e) => {
-						e.currentTarget.style.backgroundColor = "rgb(39 39 42 / 0.7)";
-						e.currentTarget.style.borderColor = "rgb(129 140 248 / 0.8)";
+						e.currentTarget.parentElement.style.backgroundColor = "rgb(39 39 42 / 0.7)";
+						e.currentTarget.parentElement.style.borderColor = "rgb(129 140 248 / 0.8)";
 					}}
 					onMouseLeave={(e) => {
-						e.currentTarget.style.backgroundColor = "transparent";
-						e.currentTarget.style.borderColor = "rgb(212 212 212 / 0.5)";
+						e.currentTarget.parentElement.style.backgroundColor = "transparent";
+						e.currentTarget.parentElement.style.borderColor = "rgb(212 212 212 / 0.5)";
 					}}
+					className="absolute inset-0 z-10"
 					aria-label={alt}
-				>
-					<Image
-						src={image}
-						alt={alt}
-						width={48}
-						height={48}
-						style={{
-							objectFit: "cover",
-							width: "100%",
-							height: "100%",
-						}}
-						sizes="48px"
-						priority
-					/>
-				</button>
+				/>
 			</div>
 		</div>
 	);

@@ -226,12 +226,18 @@ function IconItem({ image, alt, onClick }: IconItemProps) {
 				<button
 					onClick={onClick}
 					onMouseEnter={(e) => {
-						e.currentTarget.parentElement.style.backgroundColor = "rgb(39 39 42 / 0.7)";
-						e.currentTarget.parentElement.style.borderColor = "rgb(129 140 248 / 0.8)";
+						const parent = e.currentTarget.parentElement;
+						if (parent) {
+							parent.style.backgroundColor = "rgb(39 39 42 / 0.7)";
+							parent.style.borderColor = "rgb(129 140 248 / 0.8)";
+						}
 					}}
 					onMouseLeave={(e) => {
-						e.currentTarget.parentElement.style.backgroundColor = "transparent";
-						e.currentTarget.parentElement.style.borderColor = "rgb(212 212 212 / 0.5)";
+						const parent = e.currentTarget.parentElement;
+						if (parent) {
+							parent.style.backgroundColor = "transparent";
+							parent.style.borderColor = "rgb(212 212 212 / 0.5)";
+						}
 					}}
 					className="absolute inset-0 z-10"
 					aria-label={alt}

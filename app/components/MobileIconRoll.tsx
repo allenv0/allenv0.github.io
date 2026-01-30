@@ -218,7 +218,7 @@ function IconItem({ image, alt, onClick }: IconItemProps) {
 						borderWidth: "2px",
 						borderStyle: "solid",
 						borderColor: "rgb(212 212 212 / 0.5)",
-						backgroundColor: "rgb(39 39 42 / 0.5)",
+						backgroundColor: "transparent",
 						cursor: "pointer",
 						transition: "background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease",
 					}}
@@ -227,7 +227,7 @@ function IconItem({ image, alt, onClick }: IconItemProps) {
 						e.currentTarget.style.borderColor = "rgb(129 140 248 / 0.8)";
 					}}
 					onMouseLeave={(e) => {
-						e.currentTarget.style.backgroundColor = "rgb(39 39 42 / 0.5)";
+						e.currentTarget.style.backgroundColor = "transparent";
 						e.currentTarget.style.borderColor = "rgb(212 212 212 / 0.5)";
 					}}
 					aria-label={alt}

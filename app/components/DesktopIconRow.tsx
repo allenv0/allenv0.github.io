@@ -100,7 +100,7 @@ function DesktopIconItem({ image, alt, onClick }: DesktopIconItemProps) {
 			>
 				<button
 					onClick={onClick}
-					className="group relative flex h-full w-full items-center justify-center overflow-hidden rounded-2xl border-2 border-zinc-300/50 bg-zinc-900/50 transition-all duration-300 hover:border-violet-400/80 hover:bg-zinc-800/70 hover:scale-110 hover:shadow-xl hover:shadow-violet-500/20 dark:border-zinc-600/50 dark:hover:border-violet-400/60"
+					className="group relative flex h-full w-full items-center justify-center overflow-hidden rounded-2xl border-2 border-zinc-300/50 bg-transparent transition-all duration-300 hover:border-violet-400/80 hover:bg-zinc-800/70 hover:scale-110 hover:shadow-xl hover:shadow-violet-500/20 dark:border-zinc-600/50 dark:hover:border-violet-400/60"
 					aria-label={alt}
 				>
 					<Image

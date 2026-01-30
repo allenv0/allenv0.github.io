@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import HeroSection from "./components/HeroSection";
 import ProjectShowcase from "./components/ProjectShowcase";
 import SocialButtons from "./components/SocialButtons";
-import HyperlinkButtons from "./components/HyperlinkButtons";
 import StyledStrong from "./components/StyledStrong";
 import { CraftyNotification } from "./components/CraftyNotification";
 
@@ -92,7 +91,6 @@ export default function Page() {
 				onOrbitingImageClick={handleOrbitingImageClick}
 				onMacClick={handleMacClick}
 			/>
-			<HyperlinkButtons show={!showOrbit} />
 			<ProjectShowcase show={showProjectCards} />
 			<SocialButtons show={showButtons} />
 			<CraftyNotification

@@ -521,7 +521,7 @@ export function MoviesContent() {
 									</svg>
 								</div>
 								<p className="text-lg">
-									Click a DVD to see details
+									Click my movie collections to see details
 								</p>
 							</div>
 						)}

@@ -7,9 +7,10 @@ import { orbitingImages } from "@/config";
 
 interface DesktopIconRowProps {
 	onImageClick?: (imageAlt: string) => void;
+	onTerminalClick?: () => void;
 }
 
-export function DesktopIconRow({ onImageClick }: DesktopIconRowProps) {
+export function DesktopIconRow({ onImageClick, onTerminalClick }: DesktopIconRowProps) {
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 	const router = useRouter();
 	const [scrollProgress, setScrollProgress] = useState(0);
@@ -86,7 +87,7 @@ export function DesktopIconRow({ onImageClick }: DesktopIconRowProps) {
 						);
 
 						// Return items in the desired order
-						return desiredOrder
+						const items = desiredOrder
 							.filter(alt => imageMap.has(alt))
 							.map(alt => imageMap.get(alt)!)
 							.map(({ image, alt }) => (
@@ -97,6 +98,21 @@ export function DesktopIconRow({ onImageClick }: DesktopIconRowProps) {
 									onClick={() => handleIconClick(alt)}
 								/>
 							));
+
+						// Insert ghost icon after Air8 (index 1)
+						const ghostIcon = (
+							<DesktopIconItem
+								key="Terminal"
+								image="/images/projects/ghost.png"
+								alt="Terminal"
+								onClick={() => onTerminalClick?.()}
+							/>
+						);
+
+						// Insert after Air8 (which is at index 1)
+						items.splice(2, 0, ghostIcon);
+
+						return items;
 					})()}
 				</div>
 

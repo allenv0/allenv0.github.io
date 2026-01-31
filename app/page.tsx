@@ -98,6 +98,7 @@ export default function Page() {
 				onOrbitingImageClick={handleOrbitingImageClick}
 				onMacClick={handleMacClick}
 				onMacDoubleClick={handleMacDoubleClick}
+				onTerminalClick={handleMacClick}
 			/>
 			<ProjectShowcase show={showProjectCards} />
 			<SocialButtons show={showButtons} />

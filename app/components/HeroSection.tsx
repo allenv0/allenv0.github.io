@@ -11,9 +11,10 @@ interface HeroSectionProps {
   onOrbitingImageClick?: (imageAlt: string) => void;
   onMacClick?: () => void;
   onMacDoubleClick?: () => void;
+  onTerminalClick?: () => void;
 }
 
-const HeroSection = ({ macPosition, showOrbit, onOrbitingImageClick, onMacClick, onMacDoubleClick }: HeroSectionProps) => {
+const HeroSection = ({ macPosition, showOrbit, onOrbitingImageClick, onMacClick, onMacDoubleClick, onTerminalClick }: HeroSectionProps) => {
   return (
     <>
       <OrbContainer>
@@ -37,7 +38,7 @@ const HeroSection = ({ macPosition, showOrbit, onOrbitingImageClick, onMacClick,
       </div>
 
       {/* Desktop icon row - visible on desktop/tablet */}
-      <DesktopIconRow onImageClick={onOrbitingImageClick} />
+      <DesktopIconRow onImageClick={onOrbitingImageClick} onTerminalClick={onTerminalClick} />
 
       {/* Mobile icon roll - only visible on mobile, at bottom, with click handlers */}
       <MobileIconRoll onImageClick={onOrbitingImageClick} />

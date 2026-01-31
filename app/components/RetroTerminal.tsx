@@ -307,16 +307,16 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 			/>
 
 			{/* Terminal Container */}
-			<div
-				className="relative w-full max-w-3xl animate-fade-in"
-				role="dialog"
-				aria-modal="true"
-				aria-label="Retro Terminal"
-			>
-				{/* Transparent Mac-style Case */}
-				<div className="relative rounded-2xl border border-black/10 bg-gradient-to-b from-white/80 to-white/60 p-3 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:from-white/5 dark:to-white/[0.02]">
-					{/* Inner bezel with subtle depth */}
-					<div className="relative rounded-xl border border-black/5 bg-white/80 p-1 shadow-inner dark:border-white/5 dark:bg-black/40">
+				<div
+					className="relative w-full max-w-full animate-fade-in sm:max-w-3xl"
+					role="dialog"
+					aria-modal="true"
+					aria-label="Retro Terminal"
+				>
+					{/* Transparent Mac-style Case */}
+						<div className="relative rounded-xl border border-black/10 bg-gradient-to-b from-white/80 to-white/60 p-1.5 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:from-white/5 dark:to-white/[0.02] sm:rounded-2xl sm:p-3">
+							{/* Inner bezel with subtle depth */}
+								<div className="relative rounded-lg border border-black/5 bg-white/80 p-0.5 shadow-inner dark:border-white/5 dark:bg-black/40 sm:rounded-xl sm:p-1">
 						{/* CRT Screen Container */}
 						<div className="relative overflow-hidden rounded-lg bg-[#faf8f5] dark:bg-black">
 							{/* Screen curvature effect */}
@@ -334,8 +334,8 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 							{/* Screen glow */}
 							<div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-br from-purple-500/[0.02] via-transparent to-cyan-500/[0.02] dark:from-purple-500/5 dark:to-cyan-500/5" />
 
-							{/* Terminal Header */}
-							<div className="flex items-center justify-between border-b border-black/10 bg-black/[0.02] px-4 py-2 dark:border-white/10 dark:bg-white/[0.03]">
+									{/* Terminal Header */}
+										<div className="flex items-center justify-between border-b border-black/10 bg-black/[0.02] px-2 py-1.5 dark:border-white/10 dark:bg-white/[0.03] sm:px-4 sm:py-2">
 								<div className="flex items-center gap-2">
 									{/* Classic rainbow logo */}
 									<div className="flex h-3 w-3 items-center justify-center overflow-hidden rounded-full">
@@ -348,9 +348,9 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 											}}
 										/>
 									</div>
-									<span className="ml-2 text-xs font-medium tracking-wide text-black/60 dark:text-white/60">
-										Allen.
-									</span>
+											<span className="ml-1.5 text-[10px] font-medium tracking-wide text-black/60 dark:text-white/60 sm:ml-2 sm:text-xs">
+												Allen.
+											</span>
 								</div>
 
 								{/* Window controls */}
@@ -360,9 +360,9 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 										className="group relative h-3 w-3 rounded-full bg-red-500/80 transition-all hover:bg-red-500 hover:shadow-[0_0_8px_rgba(239,68,68,0.6)]"
 										aria-label="Close terminal"
 									>
-										<span className="absolute inset-0 flex items-center justify-center text-[6px] font-bold text-black/0 transition-all group-hover:text-black/60">
-											×
-										</span>
+													<span className="absolute inset-0 flex items-center justify-center text-[5px] font-bold text-black/0 transition-all group-hover:text-black/60 sm:text-[6px]">
+														×
+													</span>
 									</button>
 									<div className="h-3 w-3 rounded-full bg-yellow-500/80" />
 									<div className="h-3 w-3 rounded-full bg-green-500/80" />
@@ -370,11 +370,11 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 							</div>
 
 							{/* Terminal Content */}
-							<div
-								ref={terminalRef}
-								className="h-[400px] overflow-y-auto p-4 font-mono text-sm"
-								onClick={() => inputRef.current?.focus()}
-							>
+								<div
+									ref={terminalRef}
+									className="h-[80vh] overflow-y-auto p-2 font-mono text-xs sm:h-[400px] sm:p-4 sm:text-sm"
+									onClick={() => inputRef.current?.focus()}
+								>
 								{/* Terminal lines */}
 								{lines.map((line, index) => (
 									<div

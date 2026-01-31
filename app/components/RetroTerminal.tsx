@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 import allPosts from "@/lib/posts";
 
 interface TerminalLine {
@@ -119,6 +120,8 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 	const inputRef = useRef<HTMLInputElement>(null);
 	const terminalRef = useRef<HTMLDivElement>(null);
 	const router = useRouter();
+	const { resolvedTheme } = useTheme();
+	const isDark = resolvedTheme === "dark";
 
 	// Initialize welcome message
 	useEffect(() => {
@@ -298,7 +301,7 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 		<div className="fixed inset-0 z-50 flex items-center justify-center p-4">
 			{/* Backdrop */}
 			<div
-				className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+				className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity dark:bg-black/60"
 				onClick={onClose}
 				aria-hidden="true"
 			/>
@@ -311,17 +314,17 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 				aria-label="Retro Terminal"
 			>
 				{/* Transparent Mac-style Case */}
-				<div className="relative rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-white/[0.02] p-3 shadow-2xl backdrop-blur-xl">
+				<div className="relative rounded-2xl border border-black/10 bg-gradient-to-b from-white/80 to-white/60 p-3 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:from-white/5 dark:to-white/[0.02]">
 					{/* Inner bezel with subtle depth */}
-					<div className="relative rounded-xl border border-white/5 bg-black/40 p-1 shadow-inner">
+					<div className="relative rounded-xl border border-black/5 bg-white/80 p-1 shadow-inner dark:border-white/5 dark:bg-black/40">
 						{/* CRT Screen Container */}
-						<div className="relative overflow-hidden rounded-lg bg-black">
+						<div className="relative overflow-hidden rounded-lg bg-[#faf8f5] dark:bg-black">
 							{/* Screen curvature effect */}
-							<div className="pointer-events-none absolute inset-0 z-10 rounded-lg shadow-[inset_0_0_80px_rgba(0,0,0,0.8)]" />
+							<div className="pointer-events-none absolute inset-0 z-10 rounded-lg shadow-[inset_0_0_80px_rgba(0,0,0,0.1)] dark:shadow-[inset_0_0_80px_rgba(0,0,0,0.8)]" />
 
 							{/* Scanlines */}
 							<div
-								className="pointer-events-none absolute inset-0 z-10 opacity-[0.08]"
+								className="pointer-events-none absolute inset-0 z-10 opacity-[0.03] dark:opacity-[0.08]"
 								style={{
 									backgroundImage:
 										"repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.3) 2px, rgba(0,0,0,0.3) 4px)",
@@ -329,10 +332,10 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 							/>
 
 							{/* Screen glow */}
-							<div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-br from-purple-500/5 via-transparent to-cyan-500/5" />
+							<div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-br from-purple-500/[0.02] via-transparent to-cyan-500/[0.02] dark:from-purple-500/5 dark:to-cyan-500/5" />
 
 							{/* Terminal Header */}
-							<div className="flex items-center justify-between border-b border-white/10 bg-white/[0.03] px-4 py-2">
+							<div className="flex items-center justify-between border-b border-black/10 bg-black/[0.02] px-4 py-2 dark:border-white/10 dark:bg-white/[0.03]">
 								<div className="flex items-center gap-2">
 									{/* Classic rainbow logo */}
 									<div className="flex h-3 w-3 items-center justify-center overflow-hidden rounded-full">
@@ -345,7 +348,7 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 											}}
 										/>
 									</div>
-									<span className="ml-2 text-xs font-medium tracking-wide text-white/60">
+									<span className="ml-2 text-xs font-medium tracking-wide text-black/60 dark:text-white/60">
 										Allen.
 									</span>
 								</div>
@@ -378,28 +381,28 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 										key={index}
 										className={`whitespace-pre-wrap leading-relaxed ${
 											line.type === "input"
-												? "text-cyan-400/90"
+												? "text-cyan-700 dark:text-cyan-400/90"
 												: line.type === "error"
-													? "text-red-400/90"
+													? "text-red-600 dark:text-red-400/90"
 													: line.type === "system"
 														? line.color
 																? ""
-																: "text-purple-400/90"
+																: "text-purple-700 dark:text-purple-400/90"
 														: line.type === "search-result"
-															? "cursor-pointer text-yellow-400/90 hover:text-yellow-300/90 hover:underline"
-															: "text-white/80"
+															? "cursor-pointer text-amber-600 hover:text-amber-700 hover:underline dark:text-yellow-400/90 dark:hover:text-yellow-300/90"
+															: "text-black/80 dark:text-white/80"
 										}`}
 										style={{
 											color: line.color || undefined,
 											textShadow: line.color
 												? `0 0 8px ${line.color}66`
 												: line.type === "input"
-														? "0 0 8px rgba(34,211,238,0.4)"
+														? isDark ? "0 0 8px rgba(34,211,238,0.4)" : "none"
 														: line.type === "system"
-																? "0 0 8px rgba(168,85,247,0.4)"
+																? isDark ? "0 0 8px rgba(168,85,247,0.4)" : "none"
 																: line.type === "search-result"
-																	? "0 0 8px rgba(250,204,21,0.4)"
-																	: "0 0 4px rgba(255,255,255,0.2)",
+																	? isDark ? "0 0 8px rgba(250,204,21,0.4)" : "none"
+																	: isDark ? "0 0 4px rgba(255,255,255,0.2)" : "none",
 										}}
 										onClick={() => {
 											if (line.type === "search-result" && line.href) {
@@ -414,17 +417,17 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 
 								{/* Input line */}
 								<form onSubmit={handleSubmit} className="flex items-center gap-2">
-									<span className="text-cyan-400/90">{">"}</span>
+									<span className="text-cyan-700 dark:text-cyan-400/90">{">"}</span>
 									<input
 										ref={inputRef}
 										type="text"
 										value={input}
 										onChange={(e) => setInput(e.target.value)}
 										onKeyDown={handleKeyDown}
-										className="flex-1 bg-transparent text-white/90 outline-none"
+										className="flex-1 bg-transparent text-black/90 outline-none dark:text-white/90"
 										style={{
-											textShadow: "0 0 4px rgba(255,255,255,0.3)",
-											caretColor: "rgba(34,211,238,0.9)",
+											textShadow: isDark ? "0 0 4px rgba(255,255,255,0.3)" : "none",
+											caretColor: isDark ? "rgba(34,211,238,0.9)" : "rgba(21,128,135,0.9)",
 										}}
 										placeholder=""
 										autoComplete="off"
@@ -439,16 +442,16 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 
 					{/* Bottom branding */}
 					<div className="mt-2 flex items-center justify-center gap-2">
-						<div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-						<span className="text-[10px] tracking-widest text-white/30">
+						<div className="h-px flex-1 bg-gradient-to-r from-transparent via-black/20 to-transparent dark:via-white/20" />
+						<span className="text-[10px] tracking-widest text-black/40 dark:text-white/30">
 							ALLEN TERMINAL
 						</span>
-						<div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+						<div className="h-px flex-1 bg-gradient-to-r from-transparent via-black/20 to-transparent dark:via-white/20" />
 					</div>
 				</div>
 
 				{/* External glow effect */}
-				<div className="pointer-events-none absolute -inset-1 -z-10 rounded-2xl bg-gradient-to-b from-purple-500/10 via-transparent to-cyan-500/10 blur-xl" />
+				<div className="pointer-events-none absolute -inset-1 -z-10 rounded-2xl bg-gradient-to-b from-purple-500/[0.08] via-transparent to-cyan-500/[0.08] blur-xl dark:from-purple-500/10 dark:to-cyan-500/10" />
 			</div>
 		</div>
 	);

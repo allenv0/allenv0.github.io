@@ -10,9 +10,10 @@ interface HeroSectionProps {
   showOrbit: boolean;
   onOrbitingImageClick?: (imageAlt: string) => void;
   onMacClick?: () => void;
+  onMacDoubleClick?: () => void;
 }
 
-const HeroSection = ({ macPosition, showOrbit, onOrbitingImageClick, onMacClick }: HeroSectionProps) => {
+const HeroSection = ({ macPosition, showOrbit, onOrbitingImageClick, onMacClick, onMacDoubleClick }: HeroSectionProps) => {
   return (
     <>
       <OrbContainer>
@@ -30,6 +31,7 @@ const HeroSection = ({ macPosition, showOrbit, onOrbitingImageClick, onMacClick 
             className={`${macPosition === "center" ? "animate-float" : "animate-float"} ${onMacClick ? "cursor-pointer" : ""} md:scale-100 scale-[48%]`}
             priority
             onClick={onMacClick}
+            onDoubleClick={onMacDoubleClick}
           />
         </div>
       </div>

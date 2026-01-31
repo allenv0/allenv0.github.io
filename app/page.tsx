@@ -6,6 +6,7 @@ import ProjectShowcase from "./components/ProjectShowcase";
 import SocialButtons from "./components/SocialButtons";
 import StyledStrong from "./components/StyledStrong";
 import { CraftyNotification } from "./components/CraftyNotification";
+import { RetroTerminal } from "./components/RetroTerminal";
 
 export default function Page() {
 	const [showProjectCards, setShowProjectCards] = useState(false);
@@ -13,6 +14,7 @@ export default function Page() {
 	const [macPosition, setMacPosition] = useState<"center" | "top">("center");
 	const [showEmailNotification, setShowEmailNotification] = useState(false);
 	const [showOrbit, setShowOrbit] = useState(true);
+	const [showTerminal, setShowTerminal] = useState(false);
 	const router = useRouter();
 
 	const handleOrbitingImageClick = (imageAlt: string) => {
@@ -72,7 +74,12 @@ export default function Page() {
 	};
 
 	const handleMacClick = () => {
-		// Toggle orbit visibility when mac is clicked
+		// Open the retro terminal when mac is clicked
+		setShowTerminal(true);
+	};
+
+	const handleMacDoubleClick = () => {
+		// Toggle orbit visibility when mac is double-clicked
 		setShowOrbit((prev) => !prev);
 
 		// Only allow folding back if UI is currently expanded
@@ -90,12 +97,17 @@ export default function Page() {
 				showOrbit={showOrbit}
 				onOrbitingImageClick={handleOrbitingImageClick}
 				onMacClick={handleMacClick}
+				onMacDoubleClick={handleMacDoubleClick}
 			/>
 			<ProjectShowcase show={showProjectCards} />
 			<SocialButtons show={showButtons} />
 			<CraftyNotification
 				show={showEmailNotification}
 				onHide={() => setShowEmailNotification(false)}
+			/>
+			<RetroTerminal
+				isOpen={showTerminal}
+				onClose={() => setShowTerminal(false)}
 			/>
 		</>
 	);

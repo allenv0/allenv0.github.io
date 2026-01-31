@@ -2,15 +2,68 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import allPosts from "@/lib/posts";
 
 interface TerminalLine {
-	type: "input" | "output" | "error" | "system";
+	type: "input" | "output" | "error" | "system" | "search-result";
 	content: string;
+	href?: string;
+}
+
+interface SearchResult {
+	post: typeof allPosts[0];
+	score: number;
 }
 
 interface RetroTerminalProps {
 	isOpen: boolean;
 	onClose: () => void;
+}
+
+// Search function for blog posts
+function searchPosts(query: string): SearchResult[] {
+	if (!query.trim()) return [];
+
+	const queryLower = query.toLowerCase();
+
+	return allPosts
+		.map((post) => {
+			const titleLower = post.title.toLowerCase();
+			const summaryLower = post.summary.toLowerCase();
+
+			let score = 0;
+
+			// Exact title match (highest priority)
+			if (titleLower === queryLower) score += 100;
+			// Title starts with query
+			else if (titleLower.startsWith(queryLower)) score += 80;
+			// Title contains query
+			else if (titleLower.includes(queryLower)) score += 60;
+
+			// Summary contains query
+			if (summaryLower.includes(queryLower)) score += 40;
+
+			// Fuzzy match for title
+			if (score === 0) {
+				let textIndex = 0;
+				let fuzzyScore = 0;
+				for (const char of queryLower) {
+					const foundIndex = titleLower.indexOf(char, textIndex);
+					if (foundIndex === -1) {
+						fuzzyScore = 0;
+						break;
+					}
+					fuzzyScore += 10;
+					textIndex = foundIndex + 1;
+				}
+				score += fuzzyScore;
+			}
+
+			return { post, score };
+		})
+		.filter(({ score }) => score > 0)
+		.sort((a, b) => b.score - a.score)
+		.slice(0, 8);
 }
 
 const COMMANDS: Record<string, { description: string; action: () => string | null }> = {
@@ -26,41 +79,15 @@ const COMMANDS: Record<string, { description: string; action: () => string | nul
 Building digital experiences at the intersection of
 aesthetics and functionality. Based in Taipei.
 
-Type 'projects' to see my work or 'contact' to get in touch.`,
-	},
-	projects: {
-		description: "View featured projects",
-		action: () => null,
+Type 'blog' to read my posts or 'search <query>' to find content.`,
 	},
 	blog: {
 		description: "Navigate to blog",
 		action: () => null,
 	},
-	books: {
-		description: "View reading list",
+	search: {
+		description: "Search blog posts (usage: search <query>)",
 		action: () => null,
-	},
-	movies: {
-		description: "View movie recommendations",
-		action: () => null,
-	},
-	contact: {
-		description: "Show contact information",
-		action: () =>
-			`Email: allenleexyz@gmail.com
-GitHub: github.com/allenv0
-X/Twitter: x.com/allenleexyz
-
-Type 'email' to copy email to clipboard.`,
-	},
-	email: {
-		description: "Copy email to clipboard",
-		action: () => {
-			if (typeof navigator !== "undefined") {
-				navigator.clipboard.writeText("allenleexyz@gmail.com");
-			}
-			return "Email copied to clipboard!";
-		},
 	},
 	clear: {
 		description: "Clear terminal",
@@ -86,6 +113,7 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 	const [input, setInput] = useState("");
 	const [history, setHistory] = useState<string[]>([]);
 	const [historyIndex, setHistoryIndex] = useState(-1);
+	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const terminalRef = useRef<HTMLDivElement>(null);
 	const router = useRouter();
@@ -143,6 +171,18 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 			setHistory((prev) => [...prev, trimmedCmd]);
 			setHistoryIndex(-1);
 
+			// Check if it's a number selection for search results
+			const num = parseInt(trimmedCmd, 10);
+			if (!isNaN(num) && num > 0 && num <= searchResults.length) {
+				const selected = searchResults[num - 1];
+				if (selected) {
+					onClose();
+					router.push(`/blog/${selected.post._meta.path}`);
+					setSearchResults([]);
+					return;
+				}
+			}
+
 			// Handle commands
 			if (trimmedCmd === "help") {
 				const helpText = Object.entries(COMMANDS)
@@ -155,23 +195,53 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 				]);
 			} else if (trimmedCmd === "clear") {
 				setLines([]);
+				setSearchResults([]);
 			} else if (trimmedCmd === "exit") {
 				onClose();
-			} else if (trimmedCmd === "projects") {
-				onClose();
-				router.push("/");
-				setTimeout(() => {
-					window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-				}, 100);
 			} else if (trimmedCmd === "blog") {
 				onClose();
 				router.push("/blog");
-			} else if (trimmedCmd === "books") {
-				onClose();
-				router.push("/books");
-			} else if (trimmedCmd === "movies") {
-				onClose();
-				router.push("/movies");
+			} else if (trimmedCmd.startsWith("search ") || trimmedCmd === "search") {
+				const query = cmd.slice(6).trim();
+				if (!query) {
+					setLines((prev) => [
+						...prev,
+						{ type: "error", content: "Usage: search <query>" },
+						{ type: "output", content: "Example: search AI" },
+					]);
+				} else {
+					const results = searchPosts(query);
+					setSearchResults(results);
+
+					if (results.length === 0) {
+						setLines((prev) => [
+							...prev,
+							{ type: "output", content: `No results found for "${query}"` },
+						]);
+					} else {
+						const resultLines: TerminalLine[] = [
+							{ type: "output", content: `Found ${results.length} result${results.length === 1 ? "" : "s"} for "${query}":` },
+							{ type: "output", content: "" },
+						];
+
+						results.forEach(({ post, score }, index) => {
+							const relevance = score >= 80 ? "★★★" : score >= 60 ? "★★☆" : "★☆☆";
+							resultLines.push({
+								type: "search-result",
+								content: `  [${index + 1}] ${post.title} ${relevance}`,
+								href: `/blog/${post._meta.path}`,
+							});
+							resultLines.push({
+								type: "output",
+								content: `      ${post.summary.slice(0, 60)}${post.summary.length > 60 ? "..." : ""}`,
+							});
+							resultLines.push({ type: "output", content: "" });
+						});
+
+						resultLines.push({ type: "output", content: "Type a number (1-8) to open a post." });
+						setLines((prev) => [...prev, ...resultLines]);
+					}
+				}
 			} else if (COMMANDS[trimmedCmd]) {
 				const result = COMMANDS[trimmedCmd].action();
 				if (result) {
@@ -185,7 +255,7 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 				]);
 			}
 		},
-		[onClose, router],
+		[onClose, router, searchResults],
 	);
 
 	const handleSubmit = (e: React.FormEvent) => {
@@ -306,7 +376,9 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 													? "text-red-400/90"
 													: line.type === "system"
 														? "text-purple-400/90"
-														: "text-white/80"
+														: line.type === "search-result"
+															? "cursor-pointer text-yellow-400/90 hover:text-yellow-300/90 hover:underline"
+															: "text-white/80"
 										}`}
 										style={{
 											textShadow:
@@ -314,7 +386,15 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 													? "0 0 8px rgba(34,211,238,0.4)"
 													: line.type === "system"
 														? "0 0 8px rgba(168,85,247,0.4)"
-														: "0 0 4px rgba(255,255,255,0.2)",
+														: line.type === "search-result"
+															? "0 0 8px rgba(250,204,21,0.4)"
+															: "0 0 4px rgba(255,255,255,0.2)",
+										}}
+										onClick={() => {
+											if (line.type === "search-result" && line.href) {
+												onClose();
+												router.push(line.href);
+											}
 										}}
 									>
 										{line.content}

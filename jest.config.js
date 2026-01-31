@@ -10,6 +10,10 @@ const customJestConfig = {
   setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/app/$1',
+    '^@content-collections/core$': '<rootDir>/test/__mocks__/content-collections.js',
+    '^@content-collections/mdx$': '<rootDir>/test/__mocks__/content-collections-mdx.js',
+    '^@/lib/.content-collections/generated$': '<rootDir>/test/__mocks__/content-collections-generated.js',
+    '^\\.content-collections/generated$': '<rootDir>/test/__mocks__/content-collections-generated.js',
   },
   testEnvironment: 'jest-environment-jsdom',
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],

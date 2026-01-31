@@ -8,6 +8,7 @@ interface TerminalLine {
 	type: "input" | "output" | "error" | "system" | "search-result";
 	content: string;
 	href?: string;
+	color?: string;
 }
 
 interface SearchResult {
@@ -99,14 +100,15 @@ Type 'blog' to read my posts or 'search <query>' to find content.`,
 	},
 };
 
-const WELCOME_ART = `
-    ___    __    ________  ___________
-   /   |  / /   /  _/ __ \/ ____/ ___/
-  / /| | / /    / // / / / __/  \__ \ 
- / ___ |/ /____/ // /_/ / /___ ___/ / 
-/_/  |_/_____/___/_____/_____//____/  
-                                       
-`;
+// Rainbow-colored ASCII art for "Allen"
+const WELCOME_ART_LINES = [
+	{ text: "    ___    __    ________  ___________", color: "#ff6b6b" },
+	{ text: "   /   |  / /   /  _/ __ \\/ ____/ ___/", color: "#feca57" },
+	{ text: "  / /| | / /    / // / / / __/  \\__ \\ ", color: "#48dbfb" },
+	{ text: " / ___ |/ /____/ // /_/ / /___ ___/ / ", color: "#ff9ff3" },
+	{ text: "/_/  |_/_____/___/_____/_____//____/  ", color: "#54a0ff" },
+	{ text: "                                       ", color: "#5f27cd" },
+];
 
 export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 	const [lines, setLines] = useState<TerminalLine[]>([]);
@@ -121,8 +123,13 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 	// Initialize welcome message
 	useEffect(() => {
 		if (isOpen && lines.length === 0) {
+			const artLines: TerminalLine[] = WELCOME_ART_LINES.map((line) => ({
+				type: "system" as const,
+				content: line.text,
+				color: line.color,
+			}));
 			setLines([
-				{ type: "system", content: WELCOME_ART },
+				...artLines,
 				{ type: "system", content: "Welcome to Allen. Terminal v1.0" },
 				{ type: "system", content: 'Type "help" for available commands.' },
 				{ type: "system", content: "" },
@@ -375,20 +382,24 @@ export function RetroTerminal({ isOpen, onClose }: RetroTerminalProps) {
 												: line.type === "error"
 													? "text-red-400/90"
 													: line.type === "system"
-														? "text-purple-400/90"
+														? line.color
+																? ""
+																: "text-purple-400/90"
 														: line.type === "search-result"
 															? "cursor-pointer text-yellow-400/90 hover:text-yellow-300/90 hover:underline"
 															: "text-white/80"
 										}`}
 										style={{
-											textShadow:
-												line.type === "input"
-													? "0 0 8px rgba(34,211,238,0.4)"
-													: line.type === "system"
-														? "0 0 8px rgba(168,85,247,0.4)"
-														: line.type === "search-result"
-															? "0 0 8px rgba(250,204,21,0.4)"
-															: "0 0 4px rgba(255,255,255,0.2)",
+											color: line.color || undefined,
+											textShadow: line.color
+												? `0 0 8px ${line.color}66`
+												: line.type === "input"
+														? "0 0 8px rgba(34,211,238,0.4)"
+														: line.type === "system"
+																? "0 0 8px rgba(168,85,247,0.4)"
+																: line.type === "search-result"
+																	? "0 0 8px rgba(250,204,21,0.4)"
+																	: "0 0 4px rgba(255,255,255,0.2)",
 										}}
 										onClick={() => {
 											if (line.type === "search-result" && line.href) {
